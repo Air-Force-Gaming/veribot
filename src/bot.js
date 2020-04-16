@@ -1,22 +1,10 @@
 require('dotenv').config();
+
 const eris = require('eris');
 const webhookListener = require('./server.js');
-
-
-//hardcoded will need to be changed before deployment
-const BOT_OWNER_ID = '154386302316445696';
-const LOG_CHANNEL_ID = '700106834010439783';
-
-const PREFIX = 'pb!';
-
-
+const LOG_CHANNEL_ID = process.env.LOG_CHANNEL_ID;
+const ROLE_NAME = process.env.ROLE_NAME;
 const bot = new eris.Client(process.env.DISCORD_API_TOKEN);
-
-const premiumRole = {
-  name: 'testrole',
-  color: 0x6aa84f,
-  hoist: true, // Show users with this role in their own section of the member list.
-};
 
 async function updateMemberRoleForVerification(guild, member) {
   // If the user is verified on verify.airforcegaming.com they will be granted verified role.
@@ -25,7 +13,7 @@ async function updateMemberRoleForVerification(guild, member) {
   if (guild && member) {
     // Get the role, or if it doesn't exist, create it.
     let role = Array.from(guild.roles.values())
-      .find(role => role.name === premiumRole.name);
+      .find(role => role.name === ROLE_NAME);
 
     if (!role) {
       role = await guild.createRole(premiumRole);
@@ -37,75 +25,6 @@ async function updateMemberRoleForVerification(guild, member) {
   }
 }
 
-const commandForName = {};
-commandForName['verify!'] = {
-  botOwnerOnly: true,
-  execute: (msg, args) => {
-    const mention = args[0];
-    const guild = msg.channel.guild;
-    const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
-    const member = guild.members.get(userId);
-
-    const userIsInGuild = !!member;
-    if (!userIsInGuild) {
-      return msg.channel.createMessage('User not found in this guild.');
-    }
-    
-    return Promise.all([
-      msg.channel.createMessage(`${mention} verified role added.}`),
-      updateMemberRoleForVerification(guild, member),
-    ]);
-  },
-};
-
-bot.on('messageCreate', async (msg) => {
-  try {
-    const content = msg.content;
-
-    // Ignore any messages sent as direct messages.
-    // The bot will only accept commands issued in
-    // a guild.
-    if (!msg.channel.guild) {
-      return;
-    }
-
-    // Ignore any message that doesn't start with the correct prefix.
-    if (!content.startsWith(PREFIX)) {
-      return;
-    }
-
-    // Extract the name of the command
-    const parts = content.split(' ').map(s => s.trim()).filter(s => s);
-    const commandName = parts[0].substr(PREFIX.length);
-
-    // Get the requested command, if there is one.
-    const command = commandForName[commandName];
-    if (!command) {
-      return;
-    }
-
-    // If this command is only for the bot owner, refuse
-    // to execute it for any other user.
-    const authorIsBotOwner = msg.author.id === BOT_OWNER_ID;
-    if (command.botOwnerOnly && !authorIsBotOwner) {
-      return await msg.channel.createMessage('Hey, only my owner can issue that command!');
-    }
-
-    // Separate the command arguments from the command prefix and name.
-    const args = parts.slice(1);
-
-    // Execute the command.
-    await command.execute(msg, args);
-  } catch (err) {
-    console.warn('Error handling message create event');
-    console.warn(err);
-  }
-});
-
-bot.on('error', err => {
-  console.warn(err);
-});
-
 function findUserInString(str) {
   const lowercaseStr = str.toLowerCase();
   // Look for a username in the form of username#discriminator.
@@ -115,12 +34,13 @@ function findUserInString(str) {
   return user;
 }
 
-
-// embed messages not successful, gives error leading to email being a timestamp
-function logVerification(member, email, recordId, realName, timestamp) {
+function logVerification(member, email, realName) {
   const isKnownMember = !!member;
   const memberName = isKnownMember ? `${member.username}#${member.discriminator}` : 'Unknown';
   const embedColor = isKnownMember ? 0x00ff00 : 0xff0000;
+  let timestamp = new Date();
+  
+  timestamp = timestamp.toISOString();
 
   const logMessage = {
     embed: {
@@ -129,7 +49,6 @@ function logVerification(member, email, recordId, realName, timestamp) {
       timestamp: timestamp,
       fields: [
         { name: 'Email', value: email, inline: true },
-        { name: 'Record ID', value: recordId, inline: true },
         { name: 'User\'s Real Name' , value: realName, inline: true },
         { name: 'Discord name', value: memberName, inline: true },
        
@@ -142,19 +61,17 @@ function logVerification(member, email, recordId, realName, timestamp) {
 
 async function onVerify(
   email,
-  recordId,
-  timestamp,  
   realName,
-  message,
+  discName,
 ) {
   try {
-    const user = findUserInString(message);
+    const user = findUserInString(discName);
     const guild = user ? bot.guilds.find(guild => guild.members.has(user.id)) : null;
     const guildMember = guild ? guild.members.get(user.id) : null;
 
     return await Promise.all([
       updateMemberRoleForVerification(guild, guildMember),
-      logVerification(guildMember, email, recordId, realName, message, timestamp),
+      logVerification(guildMember, email, realName, discName),
     ]);
   } catch (err) {
     console.warn('Error updating verify role and logging verification');
@@ -163,7 +80,12 @@ async function onVerify(
 }
 
 webhookListener.on('verification', onVerify);
+
 bot.connect();
+
+bot.on('error', err => {
+  console.warn(err);
+});
 
 //Public functions
 const test = () => {
