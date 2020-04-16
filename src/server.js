@@ -1,20 +1,20 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+var bodyParser = require('body-parser');
 const EventEmitter = require('events');
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 class WebhookListener extends EventEmitter {
     listen() {
         app.post('/verified', (req, res) => {
-            const data = req.body.data;
+            console.log(req.body[0].disc_name);
 
-            const discName = data.disc_name;
-            const realName = data.real_name;
-            const email = data.email;
+            const discName = req.body[0].disc_name;
+            const realName = req.body[0].real_name;
+            const email = req.body[0].email;
 
             res.send({ status: 'OK' });
 
