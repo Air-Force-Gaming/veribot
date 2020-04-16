@@ -1,13 +1,14 @@
 require('dotenv').config();
 const eris = require('eris');
 const webhookListener = require('./server.js');
-//const { BOT_OWNER_ID, BOT_TOKEN, LOG_CHANNEL_ID } = require('../config.json');
 
+
+//hardcoded will need to be changed before deployment
 const BOT_OWNER_ID = '154386302316445696';
 const LOG_CHANNEL_ID = '700106834010439783';
 
 const PREFIX = 'pb!';
-const PREMIUM_CUTOFF = 10;
+
 
 const bot = new eris.Client(process.env.DISCORD_API_TOKEN);
 
@@ -18,7 +19,9 @@ const premiumRole = {
 };
 
 async function updateMemberRoleForVerification(guild, member) {
-  // If the user donated more than $10, give them the premium role.
+  // If the user is verified on verify.airforcegaming.com they will be granted verified role.
+
+  //wants ID number not name for some reason
   if (guild && member) {
     // Get the role, or if it doesn't exist, create it.
     let role = Array.from(guild.roles.values())
@@ -30,16 +33,15 @@ async function updateMemberRoleForVerification(guild, member) {
 
     // Add the role to the user, along with an explanation
     // for the guild log (the "audit log").
-    return member.addRole(role.id, 'Donated $10 or more.');
+    return member.addRole(role.id, 'Verified with Air Force Gaming!');
   }
 }
 
 const commandForName = {};
-commandForName['addpayment'] = {
+commandForName['verify!'] = {
   botOwnerOnly: true,
   execute: (msg, args) => {
     const mention = args[0];
-   // const amount = parseFloat(args[1]);
     const guild = msg.channel.guild;
     const userId = mention.replace(/<@(.*?)>/, (match, group1) => group1);
     const member = guild.members.get(userId);
@@ -48,13 +50,7 @@ commandForName['addpayment'] = {
     if (!userIsInGuild) {
       return msg.channel.createMessage('User not found in this guild.');
     }
-    /*
-    const amountIsValid = amount && !Number.isNaN(amount);
-    if (!amountIsValid) {
-      return msg.channel.createMessage('Invalid donation amount');
-    }
-    */
-
+    
     return Promise.all([
       msg.channel.createMessage(`${mention} verified role added.}`),
       updateMemberRoleForVerification(guild, member),
@@ -119,6 +115,8 @@ function findUserInString(str) {
   return user;
 }
 
+
+// embed messages not successful, gives error leading to email being a timestamp
 function logVerification(member, email, recordId, realName, timestamp) {
   const isKnownMember = !!member;
   const memberName = isKnownMember ? `${member.username}#${member.discriminator}` : 'Unknown';
@@ -134,8 +132,7 @@ function logVerification(member, email, recordId, realName, timestamp) {
         { name: 'Record ID', value: recordId, inline: true },
         { name: 'User\'s Real Name' , value: realName, inline: true },
         { name: 'Discord name', value: memberName, inline: true },
-       // { name: 'Donation amount', value: donationAmount.toString(), inline: true },
-       // { name: 'Message', value: message, inline: true },
+       
       ],
     }
   }
@@ -160,7 +157,7 @@ async function onVerify(
       logVerification(guildMember, email, recordId, realName, message, timestamp),
     ]);
   } catch (err) {
-    console.warn('Error updating donor role and logging donation');
+    console.warn('Error updating verify role and logging verification');
     console.warn(err);
   }
 }
