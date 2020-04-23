@@ -4,6 +4,7 @@ const eris = require('eris');
 const webhookListener = require('./server.js');
 const LOG_CHANNEL_ID = process.env.LOG_CHANNEL_ID;
 const ROLE_NAME = process.env.ROLE_NAME;
+const ROLE_REMOVE = process.env.ROLE_REMOVE;
 const bot = new eris.Client(process.env.DISCORD_API_TOKEN);
 
 async function updateMemberRoleForVerification(guild, member) {
@@ -12,16 +13,18 @@ async function updateMemberRoleForVerification(guild, member) {
   //wants ID number not name for some reason
   if (guild && member) {
     // Get the role, or if it doesn't exist, create it.
-    let role = Array.from(guild.roles.values())
+    let roleAdd = Array.from(guild.roles.values())
       .find(role => role.name === ROLE_NAME);
 
-    if (!role) {
-      role = await guild.createRole(premiumRole);
-    }
+    let roleRemove = Array.from(guild.roles.values())
+      .find(role => role.name === ROLE_REMOVE);
 
     // Add the role to the user, along with an explanation
     // for the guild log (the "audit log").
-    return member.addRole(role.id, 'Verified with Air Force Gaming!');
+    member.addRole(roleAdd.id, 'Verified with Air Force Gaming!');
+    member.removeRole(roleRemove.id, 'Verified with Air Force Gaming!');
+
+    return;
   }
 }
 
