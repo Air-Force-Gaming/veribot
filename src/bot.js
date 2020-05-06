@@ -27,7 +27,7 @@ async function updateMemberRoleForVerification(guild, member) {
     // Add the role to the user, along with an explanation
     // for the guild log (the "audit log").
     member.addRole(roleAdd.id, 'Verified with Air Force Gaming!');
-    member.addRole(roleComponent.id, 'Verified with Air Force Gaming!')
+    member.addRole(roleComponent.id, 'Verified with Air Force Gaming!');
     member.removeRole(roleRemove.id, 'Verified with Air Force Gaming!');
 
     return;
