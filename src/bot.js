@@ -5,6 +5,7 @@ const webhookListener = require('./server.js');
 const LOG_CHANNEL_ID = process.env.LOG_CHANNEL_ID;
 const ROLE_NAME = process.env.ROLE_NAME;
 const ROLE_REMOVE = process.env.ROLE_REMOVE;
+
 const bot = new eris.Client(process.env.DISCORD_API_TOKEN);
 
 async function updateMemberRoleForVerification(guild, member) {
@@ -12,9 +13,13 @@ async function updateMemberRoleForVerification(guild, member) {
 
   //wants ID number not name for some reason
   if (guild && member) {
-    // Get the role, or if it doesn't exist, create it.
+    // Get the role
     let roleAdd = Array.from(guild.roles.values())
       .find(role => role.name === ROLE_NAME);
+
+    let roleComponent = Array.from(guild.roles.values())
+      .find(role => role.name === component);
+
 
     let roleRemove = Array.from(guild.roles.values())
       .find(role => role.name === ROLE_REMOVE);
@@ -22,6 +27,7 @@ async function updateMemberRoleForVerification(guild, member) {
     // Add the role to the user, along with an explanation
     // for the guild log (the "audit log").
     member.addRole(roleAdd.id, 'Verified with Air Force Gaming!');
+    member.addRole(roleComponent.id, 'Verified with Air Force Gaming!')
     member.removeRole(roleRemove.id, 'Verified with Air Force Gaming!');
 
     return;
@@ -37,7 +43,7 @@ function findUserInString(str) {
   return user;
 }
 
-function logVerification(member, email, realName) {
+function logVerification(member, email, realName, component) {
   const isKnownMember = !!member;
   const memberName = isKnownMember ? `${member.username}#${member.discriminator}` : 'Unknown';
   const embedColor = isKnownMember ? 0x00ff00 : 0xff0000;
@@ -54,6 +60,7 @@ function logVerification(member, email, realName) {
         { name: 'Email', value: email, inline: true },
         { name: 'User\'s Real Name' , value: realName, inline: true },
         { name: 'Discord name', value: memberName, inline: true },
+        { name: 'Component', value: component, inline: true },
        
       ],
     }
@@ -66,6 +73,7 @@ async function onVerify(
   email,
   realName,
   discName,
+  component,
 ) {
   try {
     const user = findUserInString(discName);
@@ -74,7 +82,7 @@ async function onVerify(
 
     return await Promise.all([
       updateMemberRoleForVerification(guild, guildMember),
-      logVerification(guildMember, email, realName, discName),
+      logVerification(guildMember, email, realName, discName, component),
     ]);
   } catch (err) {
     console.warn('Error updating verify role and logging verification');
