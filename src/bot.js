@@ -8,7 +8,7 @@ const ROLE_REMOVE = process.env.ROLE_REMOVE;
 
 const bot = new eris.Client(process.env.DISCORD_API_TOKEN);
 
-async function updateMemberRoleForVerification(guild, member) {
+async function updateMemberRoleForVerification(guild, member, component) {
   // If the user is verified on verify.airforcegaming.com they will be granted verified role.
 
   //wants ID number not name for some reason
@@ -81,7 +81,7 @@ async function onVerify(
     const guildMember = guild ? guild.members.get(user.id) : null;
 
     return await Promise.all([
-      updateMemberRoleForVerification(guild, guildMember),
+      updateMemberRoleForVerification(guild, guildMember, component),
       logVerification(guildMember, email, realName, discName, component),
     ]);
   } catch (err) {
