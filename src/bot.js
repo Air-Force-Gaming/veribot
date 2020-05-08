@@ -43,7 +43,7 @@ function findUserInString(str) {
   return user;
 }
 
-function logVerification(member, email, realName, component) {
+function logVerification(member, email, realName, discName, component) {
   const isKnownMember = !!member;
   const memberName = isKnownMember ? `${member.username}#${member.discriminator}` : 'Unknown';
   const embedColor = isKnownMember ? 0x00ff00 : 0xff0000;
