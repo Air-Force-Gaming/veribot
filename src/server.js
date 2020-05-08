@@ -15,6 +15,7 @@ class WebhookListener extends EventEmitter {
             const discName = req.body[0].disc_name;
             const realName = req.body[0].real_name;
             const email = req.body[0].email;
+            const component = req.body[0].component;
 
             res.send({ status: 'OK' });
 
@@ -22,7 +23,8 @@ class WebhookListener extends EventEmitter {
                 'verification',
                 email,
                 realName,
-                discName
+                discName,
+                component
             );
         });
 
