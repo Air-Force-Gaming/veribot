@@ -106,7 +106,7 @@ const test = () => {
 
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
-  if(msg.content.includes("osanqr20")) {
+  if(msg.content.includes("osanqr20") || msg.content.includes("OsanQR20") || msg.content.includes("Osanqr20")) {
     let roleAdd = Array.from(guild.roles.values())
       .find(role => role.name === 'Quarantine');
 
