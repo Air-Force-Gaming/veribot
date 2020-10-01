@@ -129,7 +129,7 @@ bot.on("messageCreate", (msg) => {
   const lowMsg = msg.content.toLowerCase();
   let roleAdd = Array.from(guild.roles.values()).find(role => role.id === '717716131498033152');
   // .find(role => role.name === 'AiT');
- // try {
+  try {
     switch (lowMsg) {
       case 'osanqr20':
         msg.member.addRole(roleAdd.id, 'Added Osan Quarantine Role!');
@@ -174,10 +174,10 @@ bot.on("messageCreate", (msg) => {
         break;
       default:
     }  
- // }catch (err) {
- //   console.warn('Error updating verify role and logging verification from user input codes');
-//    console.warn(err);
- // }
+ }catch (err) {
+  console.warn('Error updating verify role and logging verification from user input codes');
+    console.warn(err);
+ }
 });
 
 //module.exports = bot;
