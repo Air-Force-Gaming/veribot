@@ -103,14 +103,14 @@ const test = () => {
   console.log('Connection to bot.js solid!');
 
 }
-/*
+
 // self verification for limited access with single code
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
   const lowMsg = msg.content.toLowerCase();
   if (lowMsg.includes("osanqr20")) {
     let roleAdd = Array.from(guild.roles.values())    
-    .find(role => role.name === 'Quarantine');
+    .find(role => role.name === 'AiT');
 
     msg.member.addRole(roleAdd.id, 'Added Osan Quarantine Role!');
     msg.delete('Prune join code');
@@ -122,7 +122,7 @@ bot.on("messageCreate", (msg) => {
   }
 
 });
-*/
+/*
 // self verification for limited access using switch
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
@@ -179,6 +179,6 @@ bot.on("messageCreate", (msg) => {
     console.warn(err);
  }
 });
-
+*/
 //module.exports = bot;
 exports.test = test;
