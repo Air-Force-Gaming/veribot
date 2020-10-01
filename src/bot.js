@@ -128,8 +128,8 @@ bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
   const lowMsg = msg.content.toLowerCase();
   let roleAdd = Array.from(guild.roles.values())
-    .find(role => role.id === '717716131498033152');
-  // .find(role => role.name === 'Quarantine');
+  //  .find(role => role.id === '717716131498033152');
+   .find(role => role.name === 'AiT');
   try {
     switch (lowMsg) {
       case 'osanqr20':
@@ -142,7 +142,7 @@ bot.on("messageCreate", (msg) => {
         break;
       case 'shep82':
         msg.delete('Prune join code');
-        bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + 'from Sheppard AFB!');
+        bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
          bot.createMessage(LOG_CHANNEL_ID, msg.member.mention + ', AiT, has joined from Sheppard AFB.');
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Sheppard AFB.');
