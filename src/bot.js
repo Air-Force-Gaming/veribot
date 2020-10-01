@@ -103,36 +103,33 @@ const test = () => {
   console.log('Connection to bot.js solid!');
 
 }
-
+/*
 // self verification for limited access with single code
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
   const lowMsg = msg.content.toLowerCase();
   if (lowMsg.includes("osanqr20")) {
     let roleAdd = Array.from(guild.roles.values())    
-    .find(role => role.name === 'AiT');
-
+    .find(role => role.name === 'Quarantine');
     msg.member.addRole(roleAdd.id, 'Added Osan Quarantine Role!');
     msg.delete('Prune join code');
-
     bot.createMessage(msg.channel.id, msg.member.mention + " Quarantine role added!");
     bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' to our community!');
     bot.createMessage(LOG_CHANNEL_ID, msg.member.mention + ' has joined from Osan.');
    
   }
-
 });
-/*
+*/
 // self verification for limited access using switch
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
   const lowMsg = msg.content.toLowerCase();
-  let roleAdd = Array.from(guild.roles.values()).find(role => role.id === '717716131498033152');
-  // .find(role => role.name === 'AiT');
+  let roleAdd = Array.from(guild.roles.values())
+    .find(role => role.id === '717716131498033152');
+  // .find(role => role.name === 'Quarantine');
   try {
     switch (lowMsg) {
       case 'osanqr20':
-        msg.member.addRole(roleAdd.id, 'Added Osan Quarantine Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Osan AB!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Osan AB!');
@@ -141,15 +138,13 @@ bot.on("messageCreate", (msg) => {
         
         break;
       case 'shep82':
-        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
-        bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
+        bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + 'from Sheppard AFB!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
          bot.createMessage(LOG_CHANNEL_ID, msg.member.mention + ', AiT, has joined from Sheppard AFB.');
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Sheppard AFB.');
         break;
       case 'ftsam59':
-        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Fort Sam!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Fort Sam!');
@@ -157,7 +152,6 @@ bot.on("messageCreate", (msg) => {
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Fort Sam.');
         break;
       case 'kees81':
-        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Keesler AFB!'); 
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Keesler AFB!');
@@ -165,7 +159,6 @@ bot.on("messageCreate", (msg) => {
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Keesler AFB.');
         break;
       case 'ftlee345':
-        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Fort Lee!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Fort Lee!');
@@ -174,11 +167,11 @@ bot.on("messageCreate", (msg) => {
         break;
       default:
     }  
- }catch (err) {
-  console.warn('Error updating verify role and logging verification from user input codes');
+  }catch (err) {
+    console.warn('Error updating verify role and logging verification from user input codes');
     console.warn(err);
- }
+  }
 });
-*/
+
 //module.exports = bot;
 exports.test = test;
