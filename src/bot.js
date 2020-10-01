@@ -127,8 +127,7 @@ bot.on("messageCreate", (msg) => {
 bot.on("messageCreate", (msg) => {
   const guild = msg.member ? bot.guilds.find(guild => guild.members.has(msg.member.id)) : null;
   const lowMsg = msg.content.toLowerCase();
-  let roleAdd = Array.from(guild.roles.values())
-    .find(role => role.id === '717716131498033152');
+  let roleAdd = Array.from(guild.roles.values()).find(role => role.id === '717716131498033152');
   // .find(role => role.name === 'AiT');
  // try {
     switch (lowMsg) {
