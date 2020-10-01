@@ -133,6 +133,7 @@ bot.on("messageCreate", (msg) => {
   try {
     switch (lowMsg) {
       case 'osanqr20':
+        msg.member.addRole(roleAdd.id, 'Added Osan Quarantine Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Osan AB!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Osan AB!');
@@ -141,6 +142,7 @@ bot.on("messageCreate", (msg) => {
         
         break;
       case 'shep82':
+        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Sheppard AFB!');
@@ -148,6 +150,7 @@ bot.on("messageCreate", (msg) => {
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Sheppard AFB.');
         break;
       case 'ftsam59':
+        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Fort Sam!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Fort Sam!');
@@ -155,6 +158,7 @@ bot.on("messageCreate", (msg) => {
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Fort Sam.');
         break;
       case 'kees81':
+        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Keesler AFB!'); 
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Keesler AFB!');
@@ -162,6 +166,7 @@ bot.on("messageCreate", (msg) => {
         //bot.createMessage('700106834010439783', msg.member.mention + ', AiT, has joined from Keesler AFB.');
         break;
       case 'ftlee345':
+        msg.member.addRole(roleAdd.id, 'Added AiT Role!');
         msg.delete('Prune join code');
         bot.createMessage('716213574036488235', 'Please welcome ' + msg.member.mention + ' from Fort Lee!');
         //bot.createMessage('699304600175378445', 'Please welcome ' + msg.member.mention + ' from Fort Lee!');
